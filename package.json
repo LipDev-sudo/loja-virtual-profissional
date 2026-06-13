@@ -1,11 +1,12 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "loja-virtual-profissional",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
-    "dev": "vite"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -85,5 +86,24 @@
     "overrides": {
       "vite": "6.3.5"
     }
-  }
+  },
+  "description": "Template profissional de loja virtual com layout inspirado em grandes marketplaces, busca destacada, carrinho e estrutura escalavel.",
+  "author": "Hamilton Felipe Soares da Silva",
+  "license": "MIT",
+  "homepage": "https://loja-virtual-profissional.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LipDev-sudo/loja-virtual-profissional.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LipDev-sudo/loja-virtual-profissional/issues"
+  },
+  "keywords": [
+    "marketplace",
+    "ecommerce",
+    "storefront",
+    "react",
+    "vite",
+    "typescript"
+  ]
 }
