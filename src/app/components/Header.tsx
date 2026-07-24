@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* MEGA Search Bar */}
-          <div className="flex-1 flex items-center h-[40px] rounded-md overflow-hidden">
+          <div className="hidden sm:flex flex-1 items-center h-[40px] rounded-md overflow-hidden">
             <div className="relative">
               <button
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
@@ -121,8 +121,8 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <div className="bg-[#232F3E] text-white">
-        <div className="container mx-auto flex items-center h-[39px] px-4 gap-1 overflow-x-auto">
+      <div className="overflow-hidden bg-[#232F3E] text-white">
+        <div className="container mx-auto flex h-[39px] w-full max-w-full items-center gap-1 overflow-x-auto px-4">
           <button className="flex items-center gap-1 px-2 py-1 text-sm font-bold hover:border hover:border-white rounded-sm whitespace-nowrap border border-transparent">
             <Menu className="size-5" />
             Todos

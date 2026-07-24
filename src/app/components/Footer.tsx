@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
       {/* Main footer content */}
       <div className="bg-[#232F3E] text-[#DDD]">
         <div className="container mx-auto px-4 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+          <div className="mb-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
             {/* Column 1 - Conhca-nos */}
             <div>
               <h3 className="text-white font-bold text-base mb-4">Conheca-nos</h3>
@@ -113,7 +113,7 @@ export const Footer: React.FC = () => {
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-2">
                   <Mail className="size-4 mt-0.5 flex-shrink-0 text-[#FF9900]" />
-                  <span>contato@techstore.com.br</span>
+                  <span className="break-all">contato@techstore.com.br</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Phone className="size-4 mt-0.5 flex-shrink-0 text-[#FF9900]" />
