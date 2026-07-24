@@ -138,10 +138,14 @@
 
   body {
     @apply bg-background text-foreground;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   html {
     font-size: var(--font-size);
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   h1 {
