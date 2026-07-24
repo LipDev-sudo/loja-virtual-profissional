@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import {
@@ -17,7 +17,82 @@ import { Cart } from '../components/Cart';
 import { Button } from '../components/ui/button';
 import { products } from '../data/products';
 
+type OrderStatus = 'pending' | 'processing' | 'completed';
+type OrderFilter = 'all' | OrderStatus;
+
+const statusLabels: Record<OrderStatus, string> = {
+  pending: 'Pendente',
+  processing: 'Processando',
+  completed: 'Concluído',
+};
+
+const initialOrders: Array<{
+  id: string;
+  customer: string;
+  product: string;
+  value: number;
+  status: OrderStatus;
+  date: string;
+}> = [
+  {
+    id: '#1234',
+    customer: 'João Silva',
+    product: 'Smartphone Max',
+    value: 3299.9,
+    status: 'completed',
+    date: '22/02/2026 14:32',
+  },
+  {
+    id: '#1235',
+    customer: 'Maria Santos',
+    product: 'Fone Premium',
+    value: 899.9,
+    status: 'completed',
+    date: '22/02/2026 14:15',
+  },
+  {
+    id: '#1236',
+    customer: 'Pedro Costa',
+    product: 'Notebook Ultra',
+    value: 4599.9,
+    status: 'processing',
+    date: '22/02/2026 13:58',
+  },
+  {
+    id: '#1237',
+    customer: 'Ana Paula',
+    product: 'Smartwatch Pro',
+    value: 1299.9,
+    status: 'completed',
+    date: '22/02/2026 13:45',
+  },
+  {
+    id: '#1238',
+    customer: 'Carlos Oliveira',
+    product: 'Câmera Digital Pro',
+    value: 8999.9,
+    status: 'pending',
+    date: '22/02/2026 13:22',
+  },
+];
+
 export const AdminPanel: React.FC = () => {
+  const [orders, setOrders] = useState(initialOrders);
+  const [orderFilter, setOrderFilter] = useState<OrderFilter>('all');
+  const visibleOrders = orderFilter === 'all' ? orders : orders.filter((order) => order.status === orderFilter);
+
+  const advanceOrder = (id: string) => {
+    setOrders((currentOrders) =>
+      currentOrders.map((order) => {
+        if (order.id !== id || order.status === 'completed') return order;
+        return {
+          ...order,
+          status: order.status === 'pending' ? 'processing' : 'completed',
+        };
+      }),
+    );
+  };
+
   const stats = [
     {
       icon: DollarSign,
@@ -49,55 +124,12 @@ export const AdminPanel: React.FC = () => {
     },
   ];
 
-  const recentOrders = [
-    {
-      id: '#1234',
-      customer: 'João Silva',
-      product: 'Smartphone Max',
-      value: 3299.9,
-      status: 'completed',
-      date: '22/02/2026 14:32',
-    },
-    {
-      id: '#1235',
-      customer: 'Maria Santos',
-      product: 'Fone Premium',
-      value: 899.9,
-      status: 'completed',
-      date: '22/02/2026 14:15',
-    },
-    {
-      id: '#1236',
-      customer: 'Pedro Costa',
-      product: 'Notebook Ultra',
-      value: 4599.9,
-      status: 'processing',
-      date: '22/02/2026 13:58',
-    },
-    {
-      id: '#1237',
-      customer: 'Ana Paula',
-      product: 'Smartwatch Pro',
-      value: 1299.9,
-      status: 'completed',
-      date: '22/02/2026 13:45',
-    },
-    {
-      id: '#1238',
-      customer: 'Carlos Oliveira',
-      product: 'Câmera Digital Pro',
-      value: 8999.9,
-      status: 'pending',
-      date: '22/02/2026 13:22',
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <Link
               to="/"
@@ -108,13 +140,13 @@ export const AdminPanel: React.FC = () => {
             </Link>
             <h1 className="text-3xl">Painel Administrativo</h1>
             <p className="text-gray-600">
-              Gerencie produtos, pedidos e acompanhe métricas em tempo real
+              Simule a triagem de pedidos, acompanhe estoque e consulte indicadores demonstrativos
             </p>
           </div>
-          <Button className="gap-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-800">
             <ShoppingBag className="size-4" />
-            Novo Produto
-          </Button>
+            Modo demonstração
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -149,12 +181,37 @@ export const AdminPanel: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200"
+            className="min-w-0 bg-white rounded-lg shadow-sm border border-gray-200 lg:col-span-2"
           >
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-xl">Pedidos Recentes</h2>
+            <div className="flex flex-col gap-4 border-b border-gray-200 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-xl">Fila de pedidos</h2>
+                <p className="mt-1 text-sm text-gray-500">Clique no status para avançar a etapa do pedido.</p>
+              </div>
+              <div className="flex flex-wrap gap-2" aria-label="Filtrar pedidos por status">
+                {[
+                  { value: 'all' as const, label: 'Todos' },
+                  { value: 'pending' as const, label: 'Pendentes' },
+                  { value: 'processing' as const, label: 'Processando' },
+                  { value: 'completed' as const, label: 'Concluídos' },
+                ].map((filter) => (
+                  <button
+                    key={filter.value}
+                    type="button"
+                    aria-pressed={orderFilter === filter.value}
+                    onClick={() => setOrderFilter(filter.value)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                      orderFilter === filter.value
+                        ? 'border-[#232F3E] bg-[#232F3E] text-white'
+                        : 'border-gray-300 bg-white text-gray-600 hover:border-gray-500'
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="max-w-full overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -177,8 +234,8 @@ export const AdminPanel: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentOrders.map((order, index) => (
-                    <tr key={index} className="border-t border-gray-200">
+                  {visibleOrders.map((order) => (
+                    <tr key={order.id} className="border-t border-gray-200">
                       <td className="p-4 text-sm">{order.id}</td>
                       <td className="p-4 text-sm">{order.customer}</td>
                       <td className="p-4 text-sm">{order.product}</td>
@@ -186,32 +243,39 @@ export const AdminPanel: React.FC = () => {
                         R$ {order.value.toFixed(2)}
                       </td>
                       <td className="p-4">
-                        <span
-                          className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${
+                        <button
+                          type="button"
+                          disabled={order.status === 'completed'}
+                          onClick={() => advanceOrder(order.id)}
+                          title={order.status === 'completed' ? 'Pedido concluído' : 'Avançar status'}
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs transition ${
                             order.status === 'completed'
                               ? 'bg-green-100 text-green-700'
                               : order.status === 'processing'
                               ? 'bg-blue-100 text-blue-700'
                               : 'bg-yellow-100 text-yellow-700'
-                          }`}
+                          } ${order.status === 'completed' ? 'cursor-default' : 'hover:ring-2 hover:ring-blue-300'}`}
                         >
                           {order.status === 'completed' ? (
                             <CheckCircle className="size-3" />
                           ) : (
                             <AlertCircle className="size-3" />
                           )}
-                          {order.status === 'completed'
-                            ? 'Concluído'
-                            : order.status === 'processing'
-                            ? 'Processando'
-                            : 'Pendente'}
-                        </span>
+                          {statusLabels[order.status]}
+                        </button>
                       </td>
                       <td className="p-4 text-sm text-gray-600">
                         {order.date}
                       </td>
                     </tr>
                   ))}
+                  {visibleOrders.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-sm text-gray-500">
+                        Nenhum pedido neste status.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
