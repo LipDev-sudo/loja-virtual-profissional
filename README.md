@@ -1,6 +1,6 @@
-# Loja Virtual Profissional
+# Loja Virtual Profissional — Operação administrativa
 
-Template profissional de loja virtual com layout inspirado em grandes marketplaces, busca destacada, carrinho e estrutura escalavel.
+Demonstração de operação administrativa de e-commerce, com fila de pedidos, estoque e indicadores.
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-00D4FF?style=for-the-badge)](https://loja-virtual-profissional.vercel.app/)
 [![Portfolio](https://img.shields.io/badge/Portfolio-LipDev.BR-BEF264?style=for-the-badge)](https://lipdev.vercel.app/)
@@ -8,7 +8,7 @@ Template profissional de loja virtual com layout inspirado em grandes marketplac
 
 ## Visao do projeto
 
-Projeto pensado para demonstrar uma loja mais completa, com cara de produto comercial pronto para evoluir.
+O storefront contextualiza os dados, mas a competência principal está na rota `/admin`: triagem por status, avanço controlado da etapa dos pedidos e leitura de estoque em uma interface responsiva.
 
 ## Demo
 
@@ -17,11 +17,11 @@ Projeto pensado para demonstrar uma loja mais completa, com cara de produto come
 
 ## Destaques
 
-- Layout de e-commerce com visual de marketplace
-- Busca em destaque para descoberta de produtos
-- Carrinho lateral e componentes reutilizaveis
-- Organizacao visual para catalogos maiores
-- Base preparada para filtros, categorias, login e checkout
+- Painel administrativo separado do storefront
+- Filtros funcionais da fila de pedidos
+- Avanço demonstrativo de pendente para processamento e conclusão
+- Indicadores e estoque apresentados como dados demonstrativos
+- Tabela responsiva para operação em telas menores
 
 ## Stack
 
@@ -33,7 +33,9 @@ Projeto pensado para demonstrar uma loja mais completa, com cara de produto come
 ## Como rodar localmente
 
 ```bash
-npm install
+npm ci
+npm run typecheck
+npm run lint
 npm run dev
 ```
 
@@ -42,17 +44,15 @@ Para gerar uma build de producao:
 ```bash
 npm run build
 npm run preview
+npm audit
 ```
 
-## Estrutura de evolucao
+## Limites da demonstração
 
-Este projeto pode evoluir com:
-
-- Integracao com API real
-- Painel administrativo
-- Autenticacao de usuarios
-- Checkout ou integracao com WhatsApp
-- Banco de dados para produtos, pedidos e clientes
+- dados de pedidos, clientes, estoque e indicadores são fictícios e locais;
+- alterações de status duram apenas durante a sessão;
+- não há autenticação, autorização, API, banco de dados ou pagamento real;
+- a aplicação não deve ser usada para operação de uma loja real.
 
 ## Autor
 
